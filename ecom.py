@@ -20,13 +20,18 @@ st.sidebar.title("Filter Options")
 
 # File Uploader in Sidebar
 fl = st.sidebar.file_uploader(":file_folder: Upload a file", type=(["csv", "txt", "xlsx", "xls"]))
+
 if fl is not None:
     filename = fl.name
     st.sidebar.write(filename)
     df = pd.read_csv(fl, encoding="ISO-8859-1")
 else:
-    os.chdir(r"C:\Users\Hp\Desktop\eCOM_STREAMLIT")
-    df = pd.read_csv("ecommerce_data.csv", encoding="ISO-8859-1")
+    # Load data from GitHub repository initially upon deployment
+    url = 'https://raw.githubusercontent.com/velascogringo/eCOMMERCE_DASHBOARD_INTERACTIVE/main/ecommerce_data.csv'
+    df = pd.read_csv(url, encoding="ISO-8859-1")
+
+    # Show the file name in the sidebar
+    st.sidebar.write("Loaded File: ecommerce_data.csv")
 
 # Date Filters in Sidebar
 df["order_date"] = pd.to_datetime(df["order_date"], infer_datetime_format=True, dayfirst=True, errors='coerce')
