@@ -332,8 +332,8 @@ with bottom_products_column:
         st.write(formatted_bottom10_products)
     
     # Download button for bottom10_products
-    csv_bottom10_products = bottom_products.to_csv(index=False).encode('utf-8')
-    st.download_button("Download Bottom 10 Products Data", data=csv_bottom10_products, file_name='Bottom10Products.csv', mime='text/csv',
+        csv_bottom10_products = bottom_products.to_csv(index=False).encode('utf-8')
+        st.download_button("Download Bottom 10 Products Data", data=csv_bottom10_products, file_name='Bottom10Products.csv', mime='text/csv',
                        help='Click here to download data as a CSV file')
         
 
