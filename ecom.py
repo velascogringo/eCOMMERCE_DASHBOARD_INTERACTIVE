@@ -399,7 +399,7 @@ st.plotly_chart(fig_sales_concentration_map_no_hover, use_container_width=True)
 
 # Customize the layout to adjust the text position
 fig_sales_concentration_map_no_hover.update_layout(
-    hoverlabel=dict(bgcolor="black",font_size=12)
+    hoverlabel=dict(bgcolor="white",font_size=12)
 )
 # Create an expander for displaying total sales per state
 with st.expander(""):
