@@ -192,13 +192,13 @@ cl1, cl2 = st.columns(2)
 with cl1:
     with st.expander('Category_Viewdata'):
         # Format and display category_df
-        formatted_category_df = category_df.style.background_gradient(cmap='Blues').format('${:,.2f}', subset=['sales_per_order'])
+        formatted_category_df = category_df.style.format({'sales_per_order': '${:,.2f}'})
         st.write(formatted_category_df)
         
         # Download button for category_df
         csv_category = category_df.to_csv(index=False).encode('utf-8')
         st.download_button("Download Category Data", data=csv_category, file_name='Category.csv', mime='text/csv',
-                           help='Click here to download data as a CSV file')
+                   help='Click here to download data as a CSV file')
 
 with cl2:
     with st.expander('Region_Viewdata'):
@@ -206,13 +206,13 @@ with cl2:
         region = filtered_df.groupby(by='customer_region', as_index=False)['sales_per_order'].sum()
 
         # Format and display region DataFrame
-        formatted_region_df = region.style.background_gradient(cmap='Oranges').format('${:,.2f}', subset=['sales_per_order'])
+        formatted_region_df = region.style.format({'sales_per_order': '${:,.2f}'})
         st.write(formatted_region_df)
 
-        # Download button for region DataFrame
-        csv_region = region.to_csv(index=False).encode('utf-8')
-        st.download_button("Download Region Data", data=csv_region, file_name='Region.csv', mime='text/csv',
-                           help='Click here to download data as a CSV file')
+# Download button for region DataFrame
+csv_region = region.to_csv(index=False).encode('utf-8')
+st.download_button("Download Region Data", data=csv_region, file_name='Region.csv', mime='text/csv',
+                   help='Click here to download data as a CSV file')
         
 
 filtered_df['month_year'] = filtered_df['order_date'].dt.to_period('M')
@@ -241,8 +241,8 @@ st.plotly_chart(fig2, use_container_width=True)
 
 #download timeseries data
 with st.expander('TimeSeries_View Data:'):
-    # Apply thousand separator and background gradient to the DataFrame
-    styled_linechart = linechart.style.format('{:,.2f}', subset=['sales_per_order']).background_gradient(cmap='Blues')
+    # Apply thousand separator to the DataFrame
+    styled_linechart = linechart.style.format('{:,.2f}', subset=['sales_per_order'])
     
     # Display the styled DataFrame
     st.write(styled_linechart)
@@ -284,14 +284,14 @@ with top_products_column:
     
     # Expander for Top 10 Products Table
     with st.expander("Top 10 Products Data", expanded=False):
-        # Format and display top10_products DataFrame
-        formatted_top10_products = top_products.style.background_gradient(cmap='Blues').format('${:,.2f}', subset=['sales_per_order'])
+        # Format and display top10_products DataFrame 
+        formatted_top10_products = top_products.style.format({'sales_per_order': '${:,.2f}'})
         st.write(formatted_top10_products)
-        
-        # Download button for top10_products
+    
+    # Download button for top10_products
         csv_top10_products = top_products.to_csv(index=False).encode('utf-8')
         st.download_button("Download Top 10 Products Data", data=csv_top10_products, file_name='Top10Products.csv', mime='text/csv',
-                           help='Click here to download data as a CSV file')
+                       help='Click here to download data as a CSV file')
 
 
 # Bottom 10 Products
@@ -322,14 +322,14 @@ with bottom_products_column:
 
 # Expander for Bottom 10 Products Table
     with st.expander("Bottom 10 Products Data", expanded=False):
-        # Format and display bottom10_products DataFrame
-        formatted_bottom10_products = bottom_products.style.background_gradient(cmap='Blues').format('${:,.2f}', subset=['sales_per_order'])
+    # Format and display bottom10_products DataFrame 
+        formatted_bottom10_products = bottom_products.style.format({'sales_per_order': '${:,.2f}'})
         st.write(formatted_bottom10_products)
-        
-        # Download button for bottom10_products
-        csv_bottom10_products = bottom_products.to_csv(index=False).encode('utf-8')
-        st.download_button("Download Bottom 10 Products Data", data=csv_bottom10_products, file_name='Bottom10Products.csv', mime='text/csv',
-                           help='Click here to download data as a CSV file')
+    
+    # Download button for bottom10_products
+    csv_bottom10_products = bottom_products.to_csv(index=False).encode('utf-8')
+    st.download_button("Download Bottom 10 Products Data", data=csv_bottom10_products, file_name='Bottom10Products.csv', mime='text/csv',
+                       help='Click here to download data as a CSV file')
         
 
 # SALES MAP
