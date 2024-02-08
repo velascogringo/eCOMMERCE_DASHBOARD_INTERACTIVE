@@ -392,7 +392,7 @@ customdata = list(filtered_df['customer_state'])
 
 
 # Set text color to white
-fig_sales_concentration_map_no_hover.update_traces(textfont_color='gray', hovertemplate=hover_template,
+fig_sales_concentration_map_no_hover.update_traces(textfont_color='black', hovertemplate=hover_template,
 customdata=customdata, textposition='top center')
 
 st.plotly_chart(fig_sales_concentration_map_no_hover, use_container_width=True)
