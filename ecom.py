@@ -338,6 +338,7 @@ with bottom_products_column:
         
 
 # SALES MAP
+st.subheader("Sales Map")
 
 # Create a DataFrame with unique total sales values for each state
 unique_total_sales_per_state = filtered_df.groupby('customer_state')['sales_per_order'].sum().reset_index()
@@ -359,7 +360,6 @@ filtered_df['text_info'] = (
 # Create scatter_mapbox 
 fig_sales_concentration_map = px.scatter_mapbox(
     filtered_df,
-    title="SALES MAP",
     lat='latitude',
     lon='longitude',
     color='customer_region',
