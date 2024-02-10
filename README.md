@@ -1,6 +1,6 @@
-# eCommerce Dashboard Analytics
+# eCommerce Dashboard Analytics with Model Deployment (Streamlit App)
+![Streamlit Logo](https://www.streamlit.io/images/brand/streamlit-logo-secondary-colormark-darktext.png)
 
-![eCommerce Dashboard](https://example.com/dashboard_screenshot.png)
 
 ## Table of Contents
 
@@ -10,7 +10,7 @@
 - [Technologies Used](#technologies-used)
 - [Usage](#usage)
 - [Contributing](#contributing)
-- [License](#license)
+
 
 ## About
 
