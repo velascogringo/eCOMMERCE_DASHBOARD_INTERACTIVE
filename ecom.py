@@ -351,6 +351,10 @@ state_to_total_sales_dict = dict(zip(unique_total_sales_per_state['customer_stat
 # Add a new column 'total_sales' to the DataFrame for hover text
 filtered_df['total_sales'] = filtered_df['customer_state'].map(state_to_total_sales_dict)
 
+#Create a column with text information for each point
+filtered_df['text_info'] = (
+        "<br>$" + filtered_df['total_sales'].map('{:,.2f}'.format)
+)
 
 # Create scatter_mapbox without hover
 fig_sales_concentration_map_no_hover = px.scatter_mapbox(
@@ -370,10 +374,7 @@ fig_sales_concentration_map_no_hover = px.scatter_mapbox(
     hover_name="customer_state"
 )
 
-# Create a column with text information for each point
-filtered_df['text_info'] = (
-        "<br>$" + filtered_df['total_sales'].map('{:,.2f}'.format)
-)
+
 
 # Customize the layout
 fig_sales_concentration_map_no_hover.update_geos(fitbounds="locations")
