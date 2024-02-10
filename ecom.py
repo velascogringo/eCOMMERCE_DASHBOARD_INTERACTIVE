@@ -389,33 +389,6 @@ fig_sales_concentration_map_no_hover.update_layout(
     hoverlabel=dict(bgcolor="white",font_size=12)
 )
 
-
-# Create an expander for displaying total sales per state
-with st.expander(""):
-    st.write("Total Sales per State:")
-    
-    # Format the 'sales_per_order' column with 2 decimals and a dollar sign
-    total_sales_per_state_formatted = unique_total_sales_per_state.copy()
-    total_sales_per_state_formatted['sales_per_order'] = total_sales_per_state_formatted['sales_per_order'].map('${:,.2f}'.format)
-    
-    # Center-align the table
-    st.markdown(
-        "<style> table {margin-left: auto; margin-right: auto;} </style>",
-        unsafe_allow_html=True
-    )
-    
-    # Display the total sales per state DataFrame with state names and a centered table
-    st.table(total_sales_per_state_formatted)
-    
-    # Add a download button for the total sales per state DataFrame
-    csv_data = total_sales_per_state_formatted.to_csv(index=True).encode('utf-8')
-    st.download_button(
-        label="Download Total Sales per State",
-        data=csv_data,
-        file_name="total_sales_per_state.csv",
-        key="download_total_sales_per_state"
-    )
-
 # Create an expander for displaying total sales per state
 with st.expander(""):
     st.write("Total Sales per State:")
