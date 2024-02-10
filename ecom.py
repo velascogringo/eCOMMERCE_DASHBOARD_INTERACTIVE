@@ -351,6 +351,11 @@ state_to_total_sales_dict = dict(zip(unique_total_sales_per_state['customer_stat
 # Add a new column 'total_sales' to the DataFrame for hover text
 filtered_df['total_sales'] = filtered_df['customer_state'].map(state_to_total_sales_dict)
 
+# Create a column with text information for each point
+filtered_df['text_info'] = (
+        "<br>$" + filtered_df['total_sales'].map('{:,.2f}'.format)
+)
+
 # Create scatter_mapbox without hover
 fig_sales_concentration_map_no_hover = px.scatter_mapbox(
     filtered_df,
@@ -365,7 +370,8 @@ fig_sales_concentration_map_no_hover = px.scatter_mapbox(
     zoom=3.5,
     opacity=.8,
     size_max=15,
-    hover_name="customer_state",
+    text='text_info',
+    hover_name="customer_state"
 )
 
 # Customize the layout
@@ -379,16 +385,47 @@ fig_sales_concentration_map_no_hover.update_layout(
 # Specify custom hover template
 hover_template = (
     "<b>State: %{hovertext}</b><br>"
-    "Total Sales: $%{customdata:,.2f}<extra></extra>"
 )
 
 # Create customdata using total sales per state
-customdata = filtered_df['total_sales']
+customdata = list(filtered_df['customer_state'])
+
 
 # Set text color to white
-fig_sales_concentration_map_no_hover.update_traces(textfont_color='black', hovertemplate=hover_template, customdata=customdata)
+fig_sales_concentration_map_no_hover.update_traces(textfont_color='black', hovertemplate=hover_template,
+customdata=customdata, textposition='top center')
 
 st.plotly_chart(fig_sales_concentration_map_no_hover, use_container_width=True)
+
+# Customize the layout to adjust the text position
+fig_sales_concentration_map_no_hover.update_layout(
+    hoverlabel=dict(bgcolor="white",font_size=12)
+)
+# Create an expander for displaying total sales per state
+with st.expander(""):
+    st.write("Total Sales per State:")
+    
+    # Format the 'sales_per_order' column with 2 decimals and a dollar sign
+    total_sales_per_state_formatted = unique_total_sales_per_state.copy()
+    total_sales_per_state_formatted['sales_per_order'] = total_sales_per_state_formatted['sales_per_order'].map('${:,.2f}'.format)
+    
+    # Center-align the table
+    st.markdown(
+        "<style> table {margin-left: auto; margin-right: auto;} </style>",
+        unsafe_allow_html=True
+    )
+    
+    # Display the total sales per state DataFrame with state names and a centered table
+    st.table(total_sales_per_state_formatted)
+    
+    # Add a download button for the total sales per state DataFrame
+    csv_data = total_sales_per_state_formatted.to_csv(index=True).encode('utf-8')
+    st.download_button(
+        label="Download Total Sales per State",
+        data=csv_data,
+        file_name="total_sales_per_state.csv",
+        key="download_total_sales_per_state"
+    )
 
 # Create an expander for displaying total sales per state
 with st.expander(""):
