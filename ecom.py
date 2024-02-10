@@ -371,8 +371,8 @@ fig_sales_concentration_map = px.scatter_mapbox(
     zoom=3.7,
     opacity=1,
     size_max=20,
-    text='text_info',
-    hover_name="customer_state"
+    hover_name="customer_state",
+    hover_data={'total_sales': True}  # Specify hover data to include total sales
 )
 
 # Customize the layout
@@ -386,25 +386,20 @@ fig_sales_concentration_map.update_layout(
 # Specify custom hover template
 hover_template = (
     "<b>State: %{hovertext}</b><br>"
+    "<b>Total Sales: $%{customdata:,.2f}</b><br>"
 )
 
-# Create customdata using state name
-customdata = list(filtered_df['customer_state'])
-
-
 # Set text color to white
-fig_sales_concentration_map.update_traces(textfont_color='white', hovertemplate=hover_template,
-customdata=customdata,  textfont_size=10)
+fig_sales_concentration_map.update_traces(textfont_color='white', hovertemplate=hover_template)
 
 fig_sales_concentration_map.update_layout(
-      hoverlabel=dict(
+    hoverlabel=dict(
         bgcolor="white",  # Set background color to white
-        font=dict(color="gray") # Set text color to black
+        font=dict(color="gray")  # Set text color to black
     )
 )
 
 st.plotly_chart(fig_sales_concentration_map, use_container_width=True)
-
 
 # Create an expander for displaying total sales per state
 with st.expander(""):
@@ -431,6 +426,3 @@ with st.expander(""):
         file_name="total_sales_per_state.csv",
         key="download_total_sales_per_state"
     )
-
-
-
