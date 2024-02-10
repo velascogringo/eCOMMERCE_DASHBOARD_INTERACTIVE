@@ -388,7 +388,7 @@ hover_template = (
 )
 
 # Create customdata using total sales per state
-customdata = list(filtered_df['customer_state'])
+customdata = list(filtered_df['customer_state'], filtered_df['total_sales']))
 
 
 # Set text color to white
