@@ -351,11 +351,6 @@ state_to_total_sales_dict = dict(zip(unique_total_sales_per_state['customer_stat
 # Add a new column 'total_sales' to the DataFrame for hover text
 filtered_df['total_sales'] = filtered_df['customer_state'].map(state_to_total_sales_dict)
 
-#Create a column with text information for each point
-filtered_df['text_info'] = (
-        "<br>$" + filtered_df['total_sales'].map('{:,.2f}'.format)
-)
-
 # Create scatter_mapbox without hover
 fig_sales_concentration_map_no_hover = px.scatter_mapbox(
     filtered_df,
@@ -370,11 +365,10 @@ fig_sales_concentration_map_no_hover = px.scatter_mapbox(
     zoom=3.5,
     opacity=.8,
     size_max=15,
-    text='text_info',
-    hover_name="customer_state"
+    hover_name="customer_state",
+    text='total_sales',  # Display total sales directly on the map
+    custom_data=['customer_state', 'total_sales'],  # Include custom data for later use
 )
-
-
 
 # Customize the layout
 fig_sales_concentration_map_no_hover.update_geos(fitbounds="locations")
@@ -384,25 +378,18 @@ fig_sales_concentration_map_no_hover.update_layout(
     width=1600,
 )
 
-# Specify custom hover template
-hover_template = (
-    "<b>State: %{hovertext}</b><br>"
-)
-
-# Create customdata using total sales per state
-customdata = list(filtered_df['customer_state'])
-
-
-# Set text color to white
-fig_sales_concentration_map_no_hover.update_traces(textfont_color='black', hovertemplate=hover_template,
-customdata=customdata, textposition='top center')
+# Set text color to black
+fig_sales_concentration_map_no_hover.update_traces(textfont_color='black')
 
 st.plotly_chart(fig_sales_concentration_map_no_hover, use_container_width=True)
+
 
 # Customize the layout to adjust the text position
 fig_sales_concentration_map_no_hover.update_layout(
     hoverlabel=dict(bgcolor="white",font_size=12)
 )
+
+
 # Create an expander for displaying total sales per state
 with st.expander(""):
     st.write("Total Sales per State:")
