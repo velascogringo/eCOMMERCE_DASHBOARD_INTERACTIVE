@@ -385,11 +385,10 @@ fig_sales_concentration_map_no_hover.update_layout(
 # Specify custom hover template
 hover_template = (
     "<b>State: %{hovertext}</b><br>"
-      "Total Sales: $%{customdata[1]:,.2f}<extra></extra>"
 )
 
 # Create customdata using total sales per state
-customdata = list(zip(filtered_df['customer_state'], filtered_df['total_sales']))
+customdata = list(filtered_df['customer_state'])
 
 
 # Set text color to white
