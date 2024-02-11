@@ -1,4 +1,4 @@
-# eCommerce Dashboard Analytics with Model Deployment (Streamlit App)
+# eCommerce Dashboard Analytics (Streamlit App Deployment)
 ![Streamlit Logo](https://www.streamlit.io/images/brand/streamlit-logo-secondary-colormark-darktext.png)
 
 
