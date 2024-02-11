@@ -174,6 +174,50 @@ st.markdown("---")
 #Create sales visualization
 category_df = filtered_df.groupby(by=['category_name'], as_index = False)['sales_per_order'].sum()
 
+# Create layout columns
+col1, col2 = st.columns(2)
+
+with col1:
+    st.subheader("Sales per Product Category")
+    fig = px.bar(category_df, x= 'category_name' , y= 'sales_per_order', text = ['${:,.2f}'.format(x) for x in category_df['sales_per_order']], 
+                 template= 'seaborn')
+
+    st.plotly_chart(fig,use_container_width=True, height = 200)
+
+# With col2
+
+with col2:
+    st.subheader("Sales per Region")
+    fig = px.pie(filtered_df, values = 'sales_per_order', names = 'customer_region', hole=0.5)
+    fig.update_traces(text = filtered_df['customer_region'], textposition = 'inside')
+    st.plotly_chart(fig, use_container_width = True)
+
+cl1, cl2 = st.columns(2)
+
+with cl1:
+    with st.expander('Category_Viewdata'):
+        # Format and display category_df
+        formatted_category_df = category_df.style.format({'sales_per_order': '${:,.2f}'})
+        st.write(formatted_category_df)
+        
+        # Download button for category_df
+        csv_category = category_df.to_csv(index=False).encode('utf-8')
+        st.download_button("Download Category Data", data=csv_category, file_name='Category.csv', mime='text/csv',
+                   help='Click here to download data as a CSV file')
+
+with cl2:
+    with st.expander('Region_Viewdata'):
+        # Group by and sum for 'sales_per_order' in filtered_df
+        region = filtered_df.groupby(by='customer_region', as_index=False)['sales_per_order'].sum()
+
+        # Format and display region DataFrame
+        formatted_region_df = region.style.format({'sales_per_order': '${:,.2f}'})
+        st.write(formatted_region_df)
+
+        # Download button for region DataFrame
+        csv_region = region.to_csv(index=False).encode('utf-8')
+        st.download_button("Download Region Data", data=csv_region, file_name='Region.csv', mime='text/csv',
+                   help='Click here to download data as a CSV file')
 
 
 filtered_df['month_year'] = filtered_df['order_date'].dt.to_period('M')
