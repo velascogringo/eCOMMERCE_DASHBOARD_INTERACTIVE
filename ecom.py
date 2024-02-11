@@ -214,12 +214,6 @@ with cl2:
         formatted_region_df = region.style.format({'sales_per_order': '${:,.2f}'})
         st.write(formatted_region_df)
 
-        # Download button for region DataFrame
-        csv_region = region.to_csv(index=False).encode('utf-8')
-        st.download_button("Download Region Data", data=csv_region, file_name='Region.csv', mime='text/csv',
-                   help='Click here to download data as a CSV file')
-        
-
 filtered_df['month_year'] = filtered_df['order_date'].dt.to_period('M')
 st.subheader('Time Series Analysis')
 
