@@ -31,7 +31,7 @@ else:
     df = pd.read_csv(url, encoding="ISO-8859-1")
 
     # Show the file name in the sidebar
-    st.sidebar.write("Initial File: ecommerce_data.csv")
+    st.sidebar.write("Loaded File: ecommerce_data.csv")
 
 # Date Filters in Sidebar
 df["order_date"] = pd.to_datetime(df["order_date"], infer_datetime_format=True, dayfirst=True, errors='coerce')
@@ -209,9 +209,11 @@ with cl2:
     with st.expander('Region_Viewdata'):
         # Group by and sum for 'sales_per_order' in filtered_df
         region = filtered_df.groupby(by='customer_region', as_index=False)['sales_per_order'].sum()
+
         # Format and display region DataFrame
         formatted_region_df = region.style.format({'sales_per_order': '${:,.2f}'})
         st.write(formatted_region_df)
+
         # Download button for region DataFrame
         csv_region = region.to_csv(index=False).encode('utf-8')
         st.download_button("Download Region Data", data=csv_region, file_name='Region.csv', mime='text/csv',
@@ -330,12 +332,13 @@ with bottom_products_column:
         st.write(formatted_bottom10_products)
     
     # Download button for bottom10_products
-    csv_bottom10_products = bottom_products.to_csv(index=False).encode('utf-8')
-    st.download_button("Download Bottom 10 Products Data", data=csv_bottom10_products, file_name='Bottom10Products.csv', mime='text/csv',
+        csv_bottom10_products = bottom_products.to_csv(index=False).encode('utf-8')
+        st.download_button("Download Bottom 10 Products Data", data=csv_bottom10_products, file_name='Bottom10Products.csv', mime='text/csv',
                        help='Click here to download data as a CSV file')
         
 
 # SALES MAP
+st.subheader("Sales Map")
 
 # Create a DataFrame with unique total sales values for each state
 unique_total_sales_per_state = filtered_df.groupby('customer_state')['sales_per_order'].sum().reset_index()
@@ -351,11 +354,11 @@ filtered_df['total_sales'] = filtered_df['customer_state'].map(state_to_total_sa
 
 # Create a column with text information for each point
 filtered_df['text_info'] = (
-        "<br>$" + filtered_df['total_sales'].map('{:,.2f}'.format)
+        "  $" + filtered_df['total_sales'].map('{:,.2f}'.format)
 )
 
-# Create scatter_mapbox without hover
-fig_sales_concentration_map_no_hover = px.scatter_mapbox(
+# Create scatter_mapbox 
+fig_sales_concentration_map = px.scatter_mapbox(
     filtered_df,
     lat='latitude',
     lon='longitude',
@@ -363,18 +366,18 @@ fig_sales_concentration_map_no_hover = px.scatter_mapbox(
     size='sales_per_order',
     color_discrete_sequence=px.colors.qualitative.Set1,
     template='seaborn',
-    mapbox_style="carto-positron",
+    mapbox_style="carto-darkmatter",
     center={"lat": 37.7749, "lon": -97.5191},
     zoom=3.5,
-    opacity=.8,
-    size_max=15,
-    text='text_info',
-    hover_name="customer_state"
+    opacity=1,
+    size_max=20,
+    hover_name="customer_state",
+    hover_data={'total_sales': True}  # Specify hover data to include total sales
 )
 
 # Customize the layout
-fig_sales_concentration_map_no_hover.update_geos(fitbounds="locations")
-fig_sales_concentration_map_no_hover.update_layout(
+fig_sales_concentration_map.update_geos(fitbounds="locations")
+fig_sales_concentration_map.update_layout(
     legend_title_text='Region',
     height=1100,
     width=1600,
@@ -383,22 +386,21 @@ fig_sales_concentration_map_no_hover.update_layout(
 # Specify custom hover template
 hover_template = (
     "<b>State: %{hovertext}</b><br>"
+    "<b>Total Sales: $%{customdata:,.2f}</b><br>"
 )
-
-# Create customdata using total sales per state
-customdata = list(filtered_df['customer_state'])
-
 
 # Set text color to white
-fig_sales_concentration_map_no_hover.update_traces(textfont_color='gray', hovertemplate=hover_template,
-customdata=customdata, textposition='top center')
+fig_sales_concentration_map.update_traces(textfont_color='white', hovertemplate=hover_template)
 
-st.plotly_chart(fig_sales_concentration_map_no_hover, use_container_width=True)
-
-# Customize the layout to adjust the text position
-fig_sales_concentration_map_no_hover.update_layout(
-    hoverlabel=dict(bgcolor="white",font_size=12)
+fig_sales_concentration_map.update_layout(
+    hoverlabel=dict(
+        bgcolor="white",  # Set background color to white
+        font=dict(color="gray")  # Set text color to black
+    )
 )
+
+st.plotly_chart(fig_sales_concentration_map, use_container_width=True)
+
 # Create an expander for displaying total sales per state
 with st.expander(""):
     st.write("Total Sales per State:")
@@ -424,6 +426,3 @@ with st.expander(""):
         file_name="total_sales_per_state.csv",
         key="download_total_sales_per_state"
     )
-
-
-
