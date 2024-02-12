@@ -209,12 +209,10 @@ with cl2:
     with st.expander('Region_Viewdata'):
         # Group by and sum for 'sales_per_order' in filtered_df
         region = filtered_df.groupby(by='customer_region', as_index=False)['sales_per_order'].sum()
-
         # Format and display region DataFrame
         formatted_region_df = region.style.format({'sales_per_order': '${:,.2f}'})
         st.write(formatted_region_df)
-
-# Download button for region DataFrame
+        # Download button for region DataFrame
         csv_region = region.to_csv(index=False).encode('utf-8')
         st.download_button("Download Region Data", data=csv_region, file_name='Region.csv', mime='text/csv',
                    help='Click here to download data as a CSV file')
