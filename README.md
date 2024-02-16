@@ -44,7 +44,7 @@ The eCommerce Dashboard Analytics application aims to help businesses make data-
 
 To access the eCommerce Dashboard Analytics application, simply visit the deployed Streamlit web app at:
 
-[https://ecommerce-sales-interactive-dashboard.streamlit.app/](https://ecommerce-sales-interactive-dashboard.streamlit.app/)
+https://ecommerce-sales-interactive-dashboard.streamlit.app/
 
 Alternatively, if you prefer to run the application locally, follow these steps:
 
